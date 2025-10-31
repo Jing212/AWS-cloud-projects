@@ -3,4 +3,13 @@ Terraform-driven AWS infra: VPC→SG→ALB→EC2→RDS with CloudWatch; uses VPC
 
 # Testing
 
-hi 
+hi
+
+# Overview
+
+<PUT PNG PICTURE HERE>
+
+
+# Instructions
+
+Step 1: Do this 
