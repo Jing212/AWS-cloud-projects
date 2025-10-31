@@ -23,3 +23,22 @@ IaC: Terraform
 - **VPC Engpoints:**
  - S3 (Gateway)
  - SSM, EC2Messages, SSMessages, CloudWatch Logs
+
+ ### **Security Groups**
+ | SG | Allows | Purpose |
+|----|--------|-----------|
+| **ALB-SG** | 80/443 from internet | Public entry |
+| **EC2-SG** | Only from ALB-SG | Protect app layer |
+| **RDS-SG** | Only from EC2-SG | Private DB access |
+
+### **Compute & App**
+- ALB → Target Group → EC2 app
+
+### **dATABASE (RDS)**
+- Private only
+- Encrypted
+
+### **Monitoring & Alerts**
+- Cloudwatch Dashboard: ALB, EC2, RDS metrics
+- Alarms
+- SNS email Notification 
