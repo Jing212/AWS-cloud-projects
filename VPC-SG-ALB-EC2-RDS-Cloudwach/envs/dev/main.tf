@@ -10,7 +10,6 @@ module "vpc" {
   database_subnets = var.database_subnets
 }
 
-
 module "sg" {
   source = "../../modules/sg"
   vpc_id = module.vpc.vpc_id
@@ -23,6 +22,20 @@ module "alb" {
   alb_sg_id      = module.sg.alb_sg_id
 }
 
+module "cloudwatch" {
+  source = "../../modules/cloudwatch"
+
+  project = var.project
+  env     = var.env
+
+  alb_lb_arn_suffix = module.alb.lb_arn_suffix
+  alb_tg_arn_suffix = module.alb.tg_arn_suffix
+
+  ec2_instance_ids = module.ec2.instance_ids   # ← 传入 EC2 实例 ID 列表
+
+  sns_email = var.alert_email
+}
+
 module "vpce" {
   source          = "../../modules/vpce"
   project         = var.project
@@ -32,8 +45,6 @@ module "vpce" {
   vpc_cidr        = var.vpc_cidr
   ec2_sg_id       = module.sg.ec2_sg_id   # ← 这个名字要和变量一致
 }
-
-
 
 module "ec2" {
   source = "../../modules/ec2"

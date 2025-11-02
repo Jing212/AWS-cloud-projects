@@ -8,3 +8,7 @@ output "vpce_ids" {
     s3_gateway  = aws_vpc_endpoint.s3.id
   }
 }
+output "vpce_logs_dns_entries" {
+  value       = aws_vpc_endpoint.logs.dns_entry
+  description = "Private DNS names and IPs of the Logs VPCE"
+}

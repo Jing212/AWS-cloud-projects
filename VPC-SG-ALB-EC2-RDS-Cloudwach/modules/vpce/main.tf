@@ -26,7 +26,7 @@ resource "aws_security_group" "vpce" {
 # 3 个 Interface Endpoint（挂私有子网 + 上面的 SG）
 resource "aws_vpc_endpoint" "ssm" {
   vpc_id              = var.vpc_id
-  service_name        = "com.amazonaws.${data.aws_region.current.name}.ssm"
+  service_name        = "com.amazonaws.${data.aws_region.current.region}.ssm"
   vpc_endpoint_type   = "Interface"
   subnet_ids          = var.private_subnets
   security_group_ids  = [aws_security_group.vpce.id]
@@ -36,7 +36,7 @@ resource "aws_vpc_endpoint" "ssm" {
 
 resource "aws_vpc_endpoint" "ssmmessages" {
   vpc_id              = var.vpc_id
-  service_name        = "com.amazonaws.${data.aws_region.current.name}.ssmmessages"
+  service_name        = "com.amazonaws.${data.aws_region.current.region}.ssmmessages"
   vpc_endpoint_type   = "Interface"
   subnet_ids          = var.private_subnets
   security_group_ids  = [aws_security_group.vpce.id]
@@ -46,7 +46,7 @@ resource "aws_vpc_endpoint" "ssmmessages" {
 
 resource "aws_vpc_endpoint" "ec2messages" {
   vpc_id              = var.vpc_id
-  service_name        = "com.amazonaws.${data.aws_region.current.name}.ec2messages"
+  service_name        = "com.amazonaws.${data.aws_region.current.region}.ec2messages"
   vpc_endpoint_type   = "Interface"
   subnet_ids          = var.private_subnets
   security_group_ids  = [aws_security_group.vpce.id]
@@ -57,8 +57,19 @@ resource "aws_vpc_endpoint" "ec2messages" {
 # S3 Gateway Endpoint（挂 VPC 主路由表）
 resource "aws_vpc_endpoint" "s3" {
   vpc_id            = var.vpc_id
-  service_name      = "com.amazonaws.${data.aws_region.current.name}.s3"
+  service_name      = "com.amazonaws.${data.aws_region.current.region}.s3"
   vpc_endpoint_type = "Gateway"
   route_table_ids   = [data.aws_vpc.this.main_route_table_id]  # 注意这里的属性名
   tags = { Name = "${local.name}-vpce-s3" }
+}
+
+# CloudWatch Logs Interface Endpoint（供 CloudWatch Agent 走内网上报）
+resource "aws_vpc_endpoint" "logs" {
+  vpc_id              = var.vpc_id
+  service_name        = "com.amazonaws.${data.aws_region.current.region}.logs"
+  vpc_endpoint_type   = "Interface"
+  subnet_ids          = var.private_subnets
+  security_group_ids  = [aws_security_group.vpce.id]  # 复用你上面创建的 VPCE SG
+  private_dns_enabled = true
+  tags = { Name = "${local.name}-vpce-logs" }
 }
