@@ -34,7 +34,7 @@ IaC: Terraform
 ### **Compute & App**
 - ALB → Target Group → EC2 app
 
-### **dATABASE (RDS)**
+### **DATABASE (RDS)**
 - Private only
 - Encrypted
 
