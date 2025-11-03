@@ -21,3 +21,17 @@ variable "alert_email" {
   type        = string
   default     = "jingjiaaws1@gmail.com"  # 改成你的邮箱
 }
+
+variable "rds_instance_class" {
+  type        = string
+  description = "RDS 实例规格（dev：db.t3.micro/medium 等）"
+  default     = "db.t3.medium"
+}
+
+variable "rds_master_password" {
+  type        = string
+  description = "RDS 主用户密码（敏感）"
+  sensitive   = true
+}
+
+

@@ -58,3 +58,55 @@ module "ec2" {
   desired_count    = var.desired_count
 }
 
+module "rds" {
+  source = "../../modules/rds"
+
+  project          = var.project
+  env              = var.env
+  vpc_id           = module.vpc.vpc_id
+  database_subnets = module.vpc.database_subnets
+
+  # 允许从 EC2 安全组访问数据库
+  allowed_sg_ids = {
+  ec2 = module.sg.ec2_sg_id
+}
+
+
+  # 选择引擎/版本/端口（以下为 MySQL 示例）
+  engine         = "mysql"
+  port           = 3306
+
+  # 规格与容量
+  instance_class        = var.rds_instance_class
+  allocated_storage     = 20
+  max_allocated_storage = 100
+  multi_az              = true
+
+  # 初始库与账号
+  db_name            = "appdb"
+  db_master_username = "adminuser"
+  db_master_password = var.rds_master_password  # ← 从 dev.tfvars/环境变量传入
+
+  # 安全与备份
+  storage_encrypted        = true
+  kms_key_id               = null
+  backup_retention_period  = 7
+  backup_window            = "19:00-21:00"
+  maintenance_window       = "sun:22:00-sun:23:00"
+  deletion_protection      = true
+
+  # 性能监控（可先关）
+  performance_insights_enabled = false
+  monitoring_interval          = 0
+
+  # 参数组（MySQL 8.0）
+  parameter_group_family = "mysql8.0"
+  parameters            = []
+
+  apply_immediately = false
+
+  tags = {
+    Owner = "platform"
+  }
+}
+
