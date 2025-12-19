@@ -19,8 +19,6 @@ terraform apply
 
 terraform destroy
 
-terraform output
-
 
 ## How it works 
 1. Students fills out a form with their GPA, English Proficiency test results (TOEFL/IELTS), their regions, butget and interests.
