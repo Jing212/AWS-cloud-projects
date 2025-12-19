@@ -5,8 +5,20 @@ This project simulates a real-world consulting workflow for international studen
 The platform is fully deployed on AWS using Terraform with a secure, cost-efficient, and pricate-only network design (NO-NAT) 
 
 ## Architecture Overview
+![Architecture diagram](images/Project1_drawio.png)
 Stack: VPC → Security Groups → ALB → EC2 App → RDS → CloudWatch + SNS  
 IaC: Terraform
+
+Deploy with Terraform command line:
+
+terraform init
+
+terraform plan
+
+terraform apply
+
+terraform destroy
+
 
 ## How it works 
 1. Students fills out a form with their GPA, English Proficiency test results (TOEFL/IELTS), their regions, butget and interests.
